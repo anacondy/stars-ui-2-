@@ -1,0 +1,256 @@
+/* static/style.css */
+
+:root {
+    --planet-color: #EDE8D4; /* Light cream/gold for line art style */
+    --orbit-color: rgba(255, 255, 255, 0.2);
+    --star-color: rgba(255, 255, 255, 0.8);
+    --sun-color: #FDB813; /* A warm yellow for the sun */
+    --info-text-color: #EDE8D4;
+    --background-dark: #000;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: var(--background-dark);
+    overflow: hidden; /* Prevent scrollbars from particles */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Space Mono', monospace; /* A cosmic-feeling font, or sans-serif */
+    color: var(--info-text-color);
+    position: relative;
+    perspective: 1000px; /* For subtle 3D effects */
+}
+
+/* Main container for the solar system */
+#solar-system-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Optional: subtle background movement for overall dynamic feel */
+    animation: backgroundPan 120s linear infinite alternate;
+}
+
+@keyframes backgroundPan {
+    0% { transform: translateY(0px) rotateX(0deg); }
+    100% { transform: translateY(-50px) rotateX(2deg); }
+}
+
+
+/* --- Stars Twinkling Effect --- */
+#stars-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none; /* Allows interaction with elements beneath */
+    z-index: 0; /* Keep stars in the background */
+}
+
+.star {
+    position: absolute;
+    background-color: var(--star-color);
+    border-radius: 50%;
+    /* Custom properties set by JS for unique animation per star */
+    animation: twinkle var(--duration) ease-in-out infinite alternate var(--delay);
+    opacity: 0; /* Stars start invisible, twinkle in */
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Subtle glow */
+}
+
+@keyframes twinkle {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.5; transform: scale(0.9); }
+}
+
+/* --- SVG Planet Scene --- */
+#planet-scene {
+    width: 90vmin; /* Responsive size relative to viewport */
+    height: 90vmin;
+    max-width: 900px; /* Maximum size */
+    max-height: 900px;
+    position: relative;
+    z-index: 10; /* Above stars */
+    transform-origin: center center; /* For overall scene rotation if desired */
+    /* Optional: subtle rotation for the entire scene */
+    animation: sceneRotate 120s linear infinite;
+}
+
+@keyframes sceneRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Sun and its flares */
+.sun {
+    fill: var(--sun-color);
+    stroke: var(--sun-color);
+    stroke-width: 2px;
+    filter: blur(2px) drop-shadow(0 0 10px var(--sun-color)); /* Glow effect */
+}
+
+.sun-flare-group {
+    transform-origin: 500px 500px; /* Center of SVG */
+    animation: sunFlareRotate 60s linear infinite;
+}
+
+.sun-flare {
+    stroke: var(--sun-color);
+    stroke-width: 1px;
+    opacity: 0.8;
+    animation: flarePulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes sunFlareRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes flarePulse {
+    0% { opacity: 0.8; stroke-width: 1px; }
+    50% { opacity: 1; stroke-width: 2px; }
+    100% { opacity: 0.8; stroke-width: 1px; }
+}
+
+/* Orbits */
+.orbit {
+    fill: none;
+    stroke: var(--orbit-color);
+    stroke-width: 1px;
+    stroke-dasharray: 2 5; /* Dashed line for a cosmic feel */
+    animation: orbitDash 30s linear infinite; /* Subtle dash animation */
+}
+
+@keyframes orbitDash {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 70; }
+}
+
+/* Planets */
+.planet {
+    fill: var(--planet-color);
+    stroke: var(--planet-color);
+    stroke-width: 1px;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); /* Subtle glow */
+}
+
+.moon {
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: none;
+    animation: moonRotate 10s linear infinite; /* Make moon rotate around its planet */
+    transform-origin: center center; /* Placeholder, will be adjusted by JS/CSS within group */
+}
+
+@keyframes moonRotate {
+    from { transform: rotate(0deg) translateX(15px); }
+    to { transform: rotate(360deg) translateX(15px); }
+}
+
+
+/* Orbital animation for planet groups */
+.planet-group {
+    transform-origin: 500px 500px; /* Center of the SVG, i.e., around the sun */
+    animation: orbit var(--orbit-speed) linear infinite;
+}
+
+/* Define the orbital path animation */
+@keyframes orbit {
+    from { transform: rotate(var(--initial-angle)); }
+    to { transform: rotate(calc(360deg + var(--initial-angle))); }
+}
+
+/* Saturn-like planet ring effect */
+.planet-ring {
+    fill: none;
+    stroke: var(--planet-color);
+    stroke-width: 2px;
+    /* The ring should rotate around its own planet, not the sun */
+    transform-origin: center center; /* Needs to be relative to the planet's position */
+    animation: ring-rotate 8s linear infinite, ring-perspective 4s ease-in-out infinite alternate;
+}
+
+@keyframes ring-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes ring-perspective {
+    0% { transform: scaleY(1) rotateX(0deg); opacity: 0.8;}
+    50% { transform: scaleY(0.8) rotateX(10deg); opacity: 1;} /* Slight tilt/wobble */
+    100% { transform: scaleY(1) rotateX(0deg); opacity: 0.8;}
+}
+
+/* Small debris/asteroids */
+.debris {
+    fill: var(--planet-color);
+    opacity: 0.6;
+    animation: debrisOrbit var(--debris-speed) linear infinite var(--debris-delay);
+    transform-origin: 500px 500px; /* Orbit around the sun */
+    filter: blur(0.5px);
+}
+
+@keyframes debrisOrbit {
+    from { transform: rotate(0deg) translateX(var(--debris-radius)); }
+    to { transform: rotate(360deg) translateX(var(--debris-radius)); }
+}
+
+/* --- Info Box UI --- */
+#info-box {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    z-index: 20;
+    max-width: 300px;
+    text-align: center;
+    border: 1px solid var(--orbit-color);
+    animation: fadeInSlide 2s ease-out forwards;
+}
+
+#info-box h1 {
+    color: var(--sun-color);
+    text-shadow: 0 0 5px var(--sun-color);
+    margin-top: 0;
+    font-size: 2.2em;
+}
+
+#info-box p {
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+@keyframes fadeInSlide {
+    0% { opacity: 0; transform: translateY(-70%) translateX(-20px); }
+    100% { opacity: 1; transform: translateY(-50%) translateX(0px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #info-box {
+        left: 50%;
+        top: 80%;
+        transform: translate(-50%, -50%);
+        padding: 15px 20px;
+        max-width: 80%;
+    }
+    #info-box h1 {
+        font-size: 1.8em;
+    }
+    #info-box p {
+        font-size: 0.8em;
+    }
+    #planet-scene {
+        width: 100vmin;
+        height: 100vmin;
+    }
+}

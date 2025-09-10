@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Cosmic Canvas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="solar-system-container">
+        <!-- Container for twinkling stars -->
+        <div id="stars-container"></div>
+
+        <!-- SVG for planets and orbits -->
+        <svg id="planet-scene" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet">
+            <!-- Center of our solar system (Sun-like entity) -->
+            <circle cx="500" cy="500" r="50" class="sun"></circle>
+            <g class="sun-flare-group">
+                <!-- Simple flares for sun, animated -->
+                <line x1="500" y1="440" x2="500" y2="420" class="sun-flare"></line>
+                <line x1="560" y1="500" x2="580" y2="500" class="sun-flare"></line>
+                <line x1="500" y1="560" x2="500" y2="580" class="sun-flare"></line>
+                <line x1="440" y1="500" x2="420" y2="500" class="sun-flare"></line>
+                <line x1="535" y1="465" x2="550" y2="450" class="sun-flare"></line>
+                <line x1="535" y1="535" x2="550" y2="550" class="sun-flare"></line>
+                <line x1="465" y1="535" x2="450" y2="550" class="sun-flare"></line>
+                <line x1="465" y1="465" x2="450" y2="450" class="sun-flare"></line>
+            </g>
+
+            <!-- Orbits - using circles for simplicity -->
+            <circle cx="500" cy="500" r="150" class="orbit"></circle>
+            <circle cx="500" cy="500" r="250" class="orbit"></circle>
+            <circle cx="500" cy="500" r="350" class="orbit"></circle>
+            <circle cx="500" cy="500" r="450" class="orbit"></circle>
+
+            <!-- Planets: Each planet is in its own group to allow for independent orbital animation -->
+            <!-- Planet 1 (Mercury-like) -->
+            <g class="planet-group" style="--orbit-radius: 150px; --orbit-speed: 20s; --initial-angle: 0deg;">
+                <circle cx="650" cy="500" r="10" class="planet planet-1"></circle>
+            </g>
+
+            <!-- Planet 2 (Earth-like) -->
+            <g class="planet-group" style="--orbit-radius: 250px; --orbit-speed: 30s; --initial-angle: 90deg;">
+                <circle cx="500" cy="250" r="20" class="planet planet-2"></circle>
+                <!-- Small moon for Earth-like planet -->
+                <circle cx="500" cy="235" r="5" class="moon"></circle>
+            </g>
+
+            <!-- Planet 3 (Saturn-like with a ring) -->
+            <g class="planet-group" style="--orbit-radius: 350px; --orbit-speed: 45s; --initial-angle: 180deg;">
+                <circle cx="150" cy="500" r="30" class="planet planet-3"></circle>
+                <!-- Saturn's ring -->
+                <ellipse cx="150" cy="500" rx="45" ry="15" class="planet-ring"></ellipse>
+            </g>
+
+            <!-- Planet 4 (Neptune-like) -->
+            <g class="planet-group" style="--orbit-radius: 450px; --orbit-speed: 60s; --initial-angle: 270deg;">
+                <circle cx="500" cy="950" r="25" class="planet planet-4"></circle>
+            </g>
+
+            <!-- Small debris/asteroids - animated -->
+            <circle cx="570" cy="570" r="3" class="debris" style="--debris-size: 3px; --debris-speed: 15s; --debris-delay: 0s; --debris-radius: 70px;"></circle>
+            <circle cx="430" cy="430" r="2" class="debris" style="--debris-size: 2px; --debris-speed: 18s; --debris-delay: 2s; --debris-radius: 70px;"></circle>
+            <circle cx="600" cy="500" r="4" class="debris" style="--debris-size: 4px; --debris-speed: 12s; --debris-delay: 4s; --debris-radius: 100px;"></circle>
+        </svg>
+
+        <!-- Dynamic Content (optional, for backend interaction) -->
+        <div id="info-box">
+            <h1>Cosmic Canvas</h1>
+            <p>Welcome to our animated solar system!</p>
+            <p>Twinkling stars and orbiting planets await.</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
